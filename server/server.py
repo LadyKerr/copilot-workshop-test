@@ -1,19 +1,13 @@
 # create a basic server using Flask
 from flask import Flask, jsonify, request
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import pickle
 
 app = Flask(__name__)
 
 # Enable CORS
-
-
-@app.after_request
-def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Headers',
-                         'Content-Type,Authorization')
-    return response
+CORS(app)
 
 
 @app.route('/')
@@ -59,6 +53,7 @@ def predict():
             })
     except Exception as e:
         return jsonify({'error': str(e)}), 400
+
 # Create a GET route that returns the list of airports
 # the list of airports is stored in a file called origion_airports.csv
 
