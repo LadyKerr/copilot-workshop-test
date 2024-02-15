@@ -2,6 +2,13 @@
 
 In the prior exercise you created a model to predict the likelihood a flight will be delayed into an airport by more than 15 minutes on a given day of the week. Now it's time to expose both this model and the associated list of airports so you can create the front-end application.
 
+## The challenge
+- create a basic server in your preferred language and framework (FastAPI, Python)
+- load the model from the pickle file.
+- create an endpoint for the model to accept the id of the day of week and airport, and return both the chances the flight will be delayed. Be sure to return the confidence percent of the prediction.
+- create an endpoint which returns the list of airport names and IDs sorted in alphabetical order.
+- remember to handle CORS
+
 ## Defining success
 
 You will have successfully completed the challenge after:
