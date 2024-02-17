@@ -2,6 +2,11 @@
 
 With the API created it's time to close everything out by creating a frontend application. While the first two exercises have been relatively prescriptive in the frameworks and style, this exercise offers you the ability to choose the direction you'd like to go for creating a frontend. You can create a website using React or Svelte, a mobile app, a Windows app... Whatever you feel most comfortable with! You can also use this as an opportunity to explore a new framework.
 
+## The challenge
+- create a basic UI which allows users to choose a day of the week and an airport.
+- after the user makes their selection, call the API you created in the prior exercise.
+- display the result to the user.
+
 ## Defining success
 
 You will have successfully completed the challenge after:
