@@ -41,9 +41,9 @@ def predict():
         # the second value is the probability of the flight being delayed
         confident_not_delayed, delayed = prediction_list
 
-        # convert the prediction to a percentage and make it 2 decimal places
-        confident_not_delayed = round(confident_not_delayed * 100, 2)
-        delayed = round(delayed * 100, 2)
+        # convert the prediction to a percentage and make it 0 decimal places
+        confident_not_delayed = int(round(confident_not_delayed * 100, 0))
+        delayed = int(round(delayed * 100, 0))
 
         print(confident_not_delayed, delayed)
 
@@ -52,7 +52,7 @@ def predict():
                 'model_prediction': prediction_list,
                 'confidence_percent': confident_not_delayed,
                 'delayed_percent': delayed,
-                'interpretation': 'We are {:.2f}% confident that the flight will not be delayed. There is a {:.2f}% chance that the flight will be delayed.'.format(confident_not_delayed, delayed)
+                'interpretation': 'There is a {:.0f}% chance that your flight will be delayed. We are {:.0f}% confident.'.format(delayed, confident_not_delayed)
             })
     except Exception as e:
         return jsonify({'error': str(e)}), 400

@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Container, Paper, Typography, Select, MenuItem, FormControl, InputLabel, Button, Box } from '@material-ui/core';
+import { createTheme, ThemeProvider } from '@material-ui/core/styles';
+import './App.css';
 
 const daysOfWeek = [
   { name: 'Monday', value: 1 },
@@ -9,6 +12,17 @@ const daysOfWeek = [
   { name: 'Saturday', value: 6 },
   { name: 'Sunday', value: 7 },
 ];
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#3f51b5',
+    },
+    secondary: {
+      main: '#f50057',
+    },
+  },
+});
 
 function App() {
   const [airports, setAirports] = useState([]);
@@ -56,32 +70,41 @@ function App() {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <label>
-          What day are you traveling?
-          <select onChange={handleDayChange}>
-            {daysOfWeek.map((day, index) => (
-              <option key={index} value={day.value}>
-                {day.name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Which airport are you traveling from?:
-          <select value={selectedAirport} onChange={e => setSelectedAirport(e.target.value)}>
-            {airports.map(airport => (
-              <option key={airport.id} value={airport.id}>{airport.name}</option>
-            ))}
-          </select>
-        </label>
-        <button type="submit">Submit</button>
-      </form>
-      <div>
-        {prediction && <h2>Prediction: {prediction.interpretation}</h2>}
-      </div>
-    </div>
+    <ThemeProvider theme={theme}>
+      <Container maxWidth="sm">
+        <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
+          <Typography variant="h4" align="center" gutterBottom>
+            Will your flight be Delayed?
+          </Typography>
+          <form onSubmit={handleSubmit}>
+            <FormControl fullWidth margin="normal">
+              <InputLabel id="day-label">What day are you traveling?</InputLabel>
+              <Select labelId="day-label" value={selectedDay} onChange={handleDayChange}>
+                {daysOfWeek.map((day, index) => (
+                  <MenuItem key={index} value={day.value}>
+                    {day.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl fullWidth margin="normal">
+              <InputLabel id="airport-label">Which airport are you traveling from?</InputLabel>
+              <Select labelId="airport-label" value={selectedAirport} onChange={e => setSelectedAirport(e.target.value)}>
+                {airports.map(airport => (
+                  <MenuItem key={airport.id} value={airport.id}>{airport.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Box display="flex" justifyContent="center" margin="1rem 0">
+              <Button variant="contained" color="primary" type="submit">Submit</Button>
+            </Box>
+          </form>
+          <Box display="flex" justifyContent="center" margin="1rem 0">
+            {prediction && <Typography variant="h5">{prediction.interpretation}</Typography>}
+          </Box>
+        </Paper>
+      </Container>
+    </ThemeProvider>
   );
 }
 
