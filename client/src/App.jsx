@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from 'react';
 
-const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const daysOfWeek = [
+  { name: 'Monday', value: 1 },
+  { name: 'Tuesday', value: 2 },
+  { name: 'Wednesday', value: 3 },
+  { name: 'Thursday', value: 4 },
+  { name: 'Friday', value: 5 },
+  { name: 'Saturday', value: 6 },
+  { name: 'Sunday', value: 7 },
+];
 
 function App() {
   const [airports, setAirports] = useState([]);
   const [selectedDay, setSelectedDay] = useState('');
   const [selectedAirport, setSelectedAirport] = useState('');
+  const [prediction, setPrediction] = useState(null);
 
   useEffect(() => {
     fetchAirports().then(setAirports);
@@ -19,14 +28,31 @@ function App() {
       }
     });
     const data = await response.json();
-    // console.log('response:', data.airports);
     return data.airports;
   };
 
-  const handleSubmit = (event) => {
+  const fetchPrediction = async (dayOfWeek, airportId) => {
+    const response = await fetch(`http://localhost:5000/predict?day_of_week=${dayOfWeek}&airport_id=${airportId}`);
+    const modelPrediction = await response.json();
+    setPrediction(modelPrediction);
+    console.log('response in fetch:', modelPrediction);
+    return modelPrediction;
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    // const selectedDay = Number(event.target.value);
     console.log('Selected day:', selectedDay);
     console.log('Selected airport:', selectedAirport);
+
+    const prediction = await fetchPrediction(selectedDay, selectedAirport);
+    console.log('Prediction in submit:', prediction);
+    return prediction;
+  };
+
+  const handleDayChange = (event) => {
+    const selectedDay = Number(event.target.value);
+    setSelectedDay(selectedDay)
   };
 
   return (
@@ -34,9 +60,11 @@ function App() {
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <label>
           What day are you traveling?
-          <select value={selectedDay} onChange={e => setSelectedDay(e.target.value)}>
-            {daysOfWeek.map(day => (
-              <option key={day} value={day}>{day}</option>
+          <select onChange={handleDayChange}>
+            {daysOfWeek.map((day, index) => (
+              <option key={index} value={day.value}>
+                {day.name}
+              </option>
             ))}
           </select>
         </label>
@@ -50,6 +78,9 @@ function App() {
         </label>
         <button type="submit">Submit</button>
       </form>
+      <div>
+        {prediction && <h2>Prediction: {prediction.interpretation}</h2>}
+      </div>
     </div>
   );
 }
