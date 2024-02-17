@@ -1,16 +1,18 @@
 # create a basic server using Flask
 from flask import Flask, jsonify, request
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import pickle
 
 app = Flask(__name__)
 
 # Enable CORS
 CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 
 @app.route('/')
+@cross_origin()
 def home():
     return "Let's build a flight delay prediction api!"
 
@@ -26,6 +28,7 @@ app = Flask(__name__)
 
 
 @app.route('/predict', methods=['GET'])
+@cross_origin()
 def predict():
     try:
         airport_id = int(request.args.get('airport_id'))
@@ -59,6 +62,7 @@ def predict():
 
 
 @app.route('/airports', methods=['GET'])
+@cross_origin()
 def airports():
     try:
         with open('origin_airport.csv', 'r') as f:
